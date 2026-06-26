@@ -35,10 +35,10 @@ func handlerRegister(s *state, cmd command) error {
 	name := cmd.args[0]
 
 	newUser := database.CreateUserParams{
-		ID: uuid.New(),
-		CreatedAt: time.Now(),
-		UpdatedAt: time.Now(),
-		Name: name,
+		ID:        uuid.New(),
+		CreatedAt: time.Now().UTC(),
+		UpdatedAt: time.Now().UTC(),
+		Name:      name,
 	}
 
 	createdUser, err := s.db.CreateUser(context.Background(), newUser)
@@ -51,6 +51,26 @@ func handlerRegister(s *state, cmd command) error {
 	}
 
 	fmt.Printf("User has been created: %v\n", createdUser)
+	return nil
+}
+
+func handlerUsers(s *state, cmd command) error {
+	currentUserName := s.cfg.CurrentUsername
+
+	users, err := s.db.GetUsers(context.Background())
+	if err != nil {
+		return err
+	}
+
+	for _, u := range users {
+		fmt.Printf("* %s", u.Name)
+
+		if u.Name == currentUserName {
+			fmt.Print(" (current)")
+		}
+		fmt.Println()
+	}
+
 	return nil
 }
 
