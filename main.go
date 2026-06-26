@@ -1,10 +1,13 @@
 package main
 
 import (
+	"database/sql"
 	"fmt"
 	"os"
 
 	"github.com/Pakar040/gator/internal/config"
+	"github.com/Pakar040/gator/internal/database"
+	_ "github.com/lib/pq"
 )
 
 func main() {
@@ -13,13 +16,17 @@ func main() {
 		fmt.Println(err)
 	}
 
-	s := state{config: &cfg}
+	db, err := sql.Open("postgres", cfg.DbUrl)
+	dbQueries := database.New(db)
+
+	s := state{cfg: &cfg, db: dbQueries}
 
 	cmds := commands{
 		registry: make(map[string]func(*state, command) error),
 	}
 
 	cmds.register("login", handlerLogin)
+	cmds.register("register", handlerRegister)
 
 	if len(os.Args) < 2 {
 		fmt.Println("Command not recognized")
