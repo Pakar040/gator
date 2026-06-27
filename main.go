@@ -29,6 +29,7 @@ func main() {
 	cmds.register("register", handlerRegister)
 	cmds.register("reset", handlerReset)
 	cmds.register("users", handlerUsers)
+	cmds.register("agg", handlerAggregate)
 
 	if len(os.Args) < 2 {
 		fmt.Println("Command not recognized")
