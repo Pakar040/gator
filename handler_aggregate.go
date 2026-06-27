@@ -54,3 +54,20 @@ func handlerAddFeed(s *state, cmd command) error {
 	fmt.Println(createdFeed)
 	return nil
 }
+
+func handlerFeeds(s *state, cmd command) error {
+	if len(cmd.args) != 0 {
+		return fmt.Errorf("Feeds command expects 0 args")
+	}
+
+	feeds, err := s.db.GetFeeds(context.Background())
+	if err != nil {
+		return err
+	}
+
+	for _, feed := range feeds {
+		fmt.Printf(" - Feed: %s; URL: %s; Username: %s\n", feed.Feedname, feed.Url, feed.Username)
+	}
+
+	return nil
+}
