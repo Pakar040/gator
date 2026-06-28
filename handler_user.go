@@ -34,14 +34,12 @@ func handlerRegister(s *state, cmd command) error {
 	}
 	name := cmd.args[0]
 
-	newUser := database.CreateUserParams{
+	createdUser, err := s.db.CreateUser(context.Background(), database.CreateUserParams{
 		ID:        uuid.New(),
 		CreatedAt: time.Now().UTC(),
 		UpdatedAt: time.Now().UTC(),
 		Name:      name,
-	}
-
-	createdUser, err := s.db.CreateUser(context.Background(), newUser)
+	})
 	if err != nil {
 		return err
 	}
@@ -50,7 +48,7 @@ func handlerRegister(s *state, cmd command) error {
 		return err
 	}
 
-	fmt.Printf("User has been created: %v\n", createdUser)
+	fmt.Printf("User has been created: \n%v\n", createdUser)
 	return nil
 }
 

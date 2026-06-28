@@ -20,15 +20,13 @@ func handlerFollow(s *state, cmd command, user database.User) error {
 		return err
 	}
 
-	newFeedFollow := database.CreateFeedFollowParams{
+	createdFeedFollow, err := s.db.CreateFeedFollow(context.Background(), database.CreateFeedFollowParams{
 		ID:        uuid.New(),
 		CreatedAt: time.Now().UTC(),
 		UpdatedAt: time.Now().UTC(),
 		UserID:    user.ID,
 		FeedID:    feedToFollow.ID,
-	}
-
-	createdFeedFollow, err := s.db.CreateFeedFollow(context.Background(), newFeedFollow)
+	})
 	if err != nil {
 		return err
 	}
