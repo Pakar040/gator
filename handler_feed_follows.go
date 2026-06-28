@@ -43,7 +43,7 @@ func handlerFollowing(s *state, cmd command, user database.User) error {
 		return fmt.Errorf("Following command expects 0 args")
 	}
 
-	feedsFollowing, err := s.db.GetFeedFollowsForUser(context.Background(), user.Name)
+	feedsFollowing, err := s.db.GetFeedFollowsForUser(context.Background(), user.ID)
 	if err != nil {
 		return err
 	}
